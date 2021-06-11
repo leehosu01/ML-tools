@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow.keras.callbacks import Callback
-
+import numpy as np
 class LRFinder(Callback):
     """
     Callback that exponentially adjusts the learning rate after each training batch between start_lr and
