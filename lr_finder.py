@@ -54,7 +54,14 @@ class LRFinder(Callback):
     def exp_annealing(self, step):
         return self.start_lr * (self.end_lr / self.start_lr) ** (step * 1. / self.max_steps)
 
-    def plot(self, title):
+    def best_lr(self):
+        #loss_crit = np.percentile(self.losses, [75])
+        #return min([(self.losses[i+1]-self.losses[i-1], self.lrs[i]) for i in range(1, len(self.losses) - 1) if self.losses[i] < loss_crit])[1]
+        return min([(self.losses[i+1]-self.losses[i-1], self.lrs[i]) for i in range(10, len(self.losses) - 10) if self.losses[i-10] > self.losses[i+10]])[1]
+            
+    def plot(self, title = None):
+        if title == None:
+            title = 'best_lr = %.3e'%self.best_lr()
         fig, ax = plt.subplots(1, 1)
         ax.set_ylabel('Loss')
         ax.set_xlabel('Learning Rate (log scale)')
@@ -62,4 +69,5 @@ class LRFinder(Callback):
         ax.set_title(title)
         ax.xaxis.set_major_formatter(plt.FormatStrFormatter('%.0e'))
         ax.set_ylim([min(self.losses)-0.01, self.losses[0] + 0.01 ])
+        ax.axvline(x=self.best_lr())
         ax.plot(self.lrs, self.losses)
