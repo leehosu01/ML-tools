@@ -68,6 +68,6 @@ class LRFinder(Callback):
         ax.set_xscale('log')
         ax.set_title(title)
         ax.xaxis.set_major_formatter(plt.FormatStrFormatter('%.0e'))
-        ax.set_ylim([min(self.losses)-0.01, self.losses[0] + 0.01 ])
+        ax.set_ylim([min(self.losses)-0.01, max(self.losses[0] + 0.01, np.percentile(self.losses, [75])) ])
         ax.axvline(x=self.best_lr())
         ax.plot(self.lrs, self.losses)
